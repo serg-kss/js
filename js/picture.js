@@ -1,4 +1,4 @@
-import { photos } from "./main";
+import { photos } from "./main.js";
 
 //контейнер для отображения фото
 let pictureContainer = document.querySelector(".pictures");
@@ -14,6 +14,7 @@ function getPicture(arr_element) {
   let picture_comments = picture.querySelector(".picture__comments");
   let picture_likes = picture.querySelector(".picture__likes");
   // присваиваем значения из переданного элемента массива
+  picture_img.dataset.id = arr_element.id;
   picture_img.src = arr_element.url;
   picture_comments.textContent = String(arr_element.comments.length);
   picture_likes.textContent = arr_element.likes;
@@ -34,3 +35,5 @@ export function getPictures() {
   }
   pictureContainer.append(fragment);
 }
+
+getPictures();
