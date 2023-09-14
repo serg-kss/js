@@ -39,7 +39,7 @@ const names = ["Яйцеслав", "Педуард", "Синий", "Просто
 function getComment(id) {
   return {
     id: id,
-    avatar: `img/avatar-${Math.floor(Math.random() * 6)}.jpg`,
+    avatar: `img/avatar-${Math.floor(Math.random() * 6)}.svg`,
     message: comments[Math.floor(Math.random() * comments.length)],
     name: names[Math.floor(Math.random() * names.length)],
   };

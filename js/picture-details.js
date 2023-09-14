@@ -9,7 +9,8 @@ const picture_likes = document.querySelector('.likes-count');
 const picture_comments = document.querySelector('.comments-count');
 const picture_cancel = document.querySelector('#picture-cancel');
 const template_comment = document.querySelector("#social__comment");
-const big_picture_preview = document.querySelector('.big-picture__preview');
+const social_comments = document.querySelector('.social__comments');
+const def_comment = document.querySelector('.social__comment');
 
 // создаем клон одного комментария
 function getComment(data) {
@@ -45,7 +46,7 @@ function getPictureInfo(id) {
             }
             picture_likes.textContent = photos[index].likes;
             picture_comments.textContent = photos[index].comments.length;
-            big_picture_preview.append(getComments(photos[index].comments));
+            social_comments.append(getComments(photos[index].comments));
         }
     }
 }
@@ -56,6 +57,7 @@ pictures.forEach(pic => {
       if (big_picture.classList.contains("hidden")) {
         big_picture.classList.remove("hidden");
         body.classList.add("modal-open")
+        def_comment.remove();
         getPictureInfo(e.target.dataset.id);
       }
     });
