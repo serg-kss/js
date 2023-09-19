@@ -3,6 +3,22 @@ const likeCount = {
   max: 200,
 };
 
+const avatarCount = {
+  min: 1,
+  max: 7,
+};
+
+const comments = [
+  "Все відмінно!",
+  "Загалом все непогано. Але не всі.",
+  "Коли ви робите фотографію, добре б прибирати палець із кадру. Зрештою, це просто непрофесійно.",
+  "Моя бабуся випадково чхнула з фотоапаратом у руках і у неї вийшла фотографія краща.",
+  "Я послизнувся на банановій шкірці і впустив фотоапарат на кота і у мене вийшла фотографія краще.",
+  "Обличчя людей на фотці перекошені, ніби їх побивають. Як можна було зловити такий невдалий момент?",
+];
+
+const names = ["Яйцеслав", "Педуард", "Синий", "Просто Толик"];
+
 // функция для получения случайного числа от 15 до 200
 function getRandomLikes() {
   let randomNum = 0;
@@ -17,17 +33,6 @@ function getId() {
   return Math.floor(Math.random() * 200);
 }
 
-const comments = [
-  "Все відмінно!",
-  "Загалом все непогано. Але не всі.",
-  "Коли ви робите фотографію, добре б прибирати палець із кадру. Зрештою, це просто непрофесійно.",
-  "Моя бабуся випадково чхнула з фотоапаратом у руках і у неї вийшла фотографія краща.",
-  "Я послизнувся на банановій шкірці і впустив фотоапарат на кота і у мене вийшла фотографія краще.",
-  "Обличчя людей на фотці перекошені, ніби їх побивають. Як можна було зловити такий невдалий момент?",
-];
-
-const names = ["Яйцеслав", "Педуард", "Синий", "Просто Толик"];
-
 // функция для получения массива коментариев
 // data types
 //привидение типов
@@ -35,18 +40,24 @@ const names = ["Яйцеслав", "Педуард", "Синий", "Просто
 //functions types
 //data types
 
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min; //Максимум не включается, минимум включается
+}
+
 //генерация коммента
 function getComment(id) {
   return {
     id: id,
-    avatar: `img/avatar-${Math.floor(Math.random() * 6)}.svg`,
+    avatar: `img/avatar-${getRandomInt(avatarCount.min, avatarCount.max)}.svg`,
     message: comments[Math.floor(Math.random() * comments.length)],
     name: names[Math.floor(Math.random() * names.length)],
   };
 }
 
 //генерация массива комментов
-function getRandomComments(comments, names) {
+function getRandomComments() {
   const commentsList = [];
 
   for (let index = 0; index < Math.floor(Math.random() * 10); index++) {
@@ -74,7 +85,7 @@ function getPhotos() {
       url: `photos/${index + 1}.jpg`,
       description: "some description here!",
       likes: getRandomLikes(),
-      comments: getRandomComments(comments, names),
+      comments: getRandomComments(),
     });
   }
   return photos;
