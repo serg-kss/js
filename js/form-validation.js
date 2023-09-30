@@ -21,8 +21,12 @@ function isEmpty(str) {
   return false;
 }
 //возвращаем значение по умолчанию для инпута хеш-тега
-function defaultValue() {
-  text_hashtags.value = "";
+function defaultValue(field) {
+  field.value = "";
+}
+//отображение ошибки
+function validationError(field, errorText) {
+  field.setCustomValidity(errorText);
 }
 //проверяем с регулярным выражением
 function isCorrectHash(str) {
@@ -43,42 +47,57 @@ function hashtagsValidation(event) {
   let correctTagLenght = true;
   let correctHash = true;
 
+  const error = {
+    error_1: "Field is empty, add some letters",
+    error_2: "no more than 5 hastags",
+    error_3: "no more that 20 letters per hastag",
+    error_4: "regulae expression error",
+    error_5: "delete diplicates",
+  };
+
   if (isEmpty(inputValue)) {
-    //проверка на пустую строку
-    defaultValue();
-  } else {
-    if (inputValueArray.length > maxHashTagsAmount) {
-      // проверка на колличество хештегов не более 5
-      defaultValue();
-    } else {
-      inputValueArray.forEach((hashTag) => {
-        if (hashTag.length > hashTagLenght) {
-          correctTagLenght = false;
-        }
-      });
-      if (!correctTagLenght) {
-        // проверка на длину хештега не более 20 символов
-        defaultValue();
-      } else {
-        inputValueArray.forEach((hashTag) => {
-          if (!isCorrectHash(hashTag)) {
-            // проверяем по регулярному выражению
-            correctHash = false;
-          }
-        });
-        if (!correctHash) {
-          defaultValue();
-        } else {
-          //проверка на наличие дубликатов
-          if (hasDuplicates(arr)) {
-            defaultValue();
-          } else {
-            console.log("Validation is ok");
-          }
-        }
-      }
-    }
+    defaultValue(text_hashtags);
+    validationError(text_hashtags, error.error_1);
+    return console.log(error.error_1);
   }
+
+  if (inputValueArray.length > maxHashTagsAmount) {
+    // проверка на колличество хештегов не более 5
+    defaultValue(text_hashtags);
+    validationError(text_hashtags, error.error_2);
+    return console.log(error.error_2);
+  }
+
+  inputValueArray.forEach((hashTag) => {
+    if (hashTag.length > hashTagLenght) {
+      correctTagLenght = false;
+    }
+  });
+
+  if (!correctTagLenght) {
+    // проверка на длину хештега не более 20 символов
+    defaultValue(text_hashtags);
+    validationError(text_hashtags, error.error_3);
+    return console.log(error.error_3);
+  }
+
+  inputValueArray.forEach((hashTag) => {
+    if (!isCorrectHash(hashTag)) {
+      correctHash = false;
+    }
+  });
+  // проверяем по регулярному выражению
+  if (!correctHash) {
+    defaultValue(text_hashtags);
+    validationError(text_hashtags, error.error_4);
+    return console.log(error.error_4);
+  }
+  if (hasDuplicates(arr)) {
+    defaultValue(text_hashtags);
+    validationError(text_hashtags, error.error_5);
+    return console.log(error.error_5);
+  }
+
 }
 text_hashtags.addEventListener("change", hashtagsValidation);
 
@@ -87,12 +106,14 @@ text_hashtags.addEventListener("change", hashtagsValidation);
 function commentValidation(event) {
   const maxlenght = 140;
   const comment = event.target.value;
+  const error = "no more than 140 symbl"
 
   if (comment.length > maxlenght) {
-    text_description.value = '';
+    defaultValue(text_description);
+    validationError(text_description, error);
   }
 }
-text_description.addEventListener("change", commentValidation)
+text_description.addEventListener("change", commentValidation);
 
 function handleFormSubmit() {
   //fields for sending to server
