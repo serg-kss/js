@@ -13,6 +13,7 @@ const template_comment = document.querySelector("#social__comment");
 const social_comments = document.querySelector(".social__comments");
 const def_comment = document.querySelector(".social__comment");
 const social_comments_loader = document.querySelector(".social__comments-loader");
+const comments_shown = document.querySelector(".comments-shown");
 let picture_id = 0;
 let comment_index = 5;
 
@@ -42,13 +43,14 @@ social_comments_loader.addEventListener('click', increaseCommentsIndex);
 
 function getComments(dataArr) {
   let comments = new DocumentFragment();
-  if (dataArr.length - comment_index < 0) {
+  if (dataArr.length - comment_index <= 0) {
     comment_index = dataArr.length;
     social_comments_loader.classList.add("hidden");
   }
   for (let index = 0; index < comment_index; index++) {
     comments.append((getComment(dataArr[index])));
   }
+  comments_shown.textContent = comment_index;
   return comments;
 }
 
@@ -93,17 +95,14 @@ function handler(event) {
   }
 }
 
-function closePictureWindow() {
+function backToDefault() {
   big_picture.classList.add("hidden");
   body.classList.remove("modal-open");
-}
-
-function backToDefault() {
-  closePictureWindow();
   social_comments.replaceChildren('');
   comment_index = 5;
   social_comments_loader.classList.remove("hidden");
 }
+
 
 function closeWindow() {
   backToDefault();
