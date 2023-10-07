@@ -48,24 +48,24 @@ function hashtagsValidation(event) {
   let correctHash = true;
 
   const error = {
-    error_1: "Field is empty, add some letters",
-    error_2: "no more than 5 hastags",
-    error_3: "no more that 20 letters per hastag",
-    error_4: "regulae expression error",
-    error_5: "delete diplicates",
+    error_empty: "Field is empty, add some letters",
+    error_limit: "no more than 5 hastags",
+    error_letter_limit: "no more that 20 letters per hastag",
+    error_regular: "regulae expression error",
+    error_diplicates: "delete diplicates",
   };
 
   if (isEmpty(inputValue)) {
     defaultValue(text_hashtags);
-    validationError(text_hashtags, error.error_1);
-    return console.log(error.error_1);
+    validationError(text_hashtags, error.error_empty);
+    return console.log(error.error_empty);
   }
 
   if (inputValueArray.length > maxHashTagsAmount) {
     // проверка на колличество хештегов не более 5
     defaultValue(text_hashtags);
-    validationError(text_hashtags, error.error_2);
-    return console.log(error.error_2);
+    validationError(text_hashtags, error.error_limit);
+    return console.log(error.error_limit);
   }
 
   inputValueArray.forEach((hashTag) => {
@@ -77,8 +77,8 @@ function hashtagsValidation(event) {
   if (!correctTagLenght) {
     // проверка на длину хештега не более 20 символов
     defaultValue(text_hashtags);
-    validationError(text_hashtags, error.error_3);
-    return console.log(error.error_3);
+    validationError(text_hashtags, error.error_letter_limit);
+    return console.log(error.error_letter_limit);
   }
 
   inputValueArray.forEach((hashTag) => {
@@ -89,13 +89,13 @@ function hashtagsValidation(event) {
   // проверяем по регулярному выражению
   if (!correctHash) {
     defaultValue(text_hashtags);
-    validationError(text_hashtags, error.error_4);
-    return console.log(error.error_4);
+    validationError(text_hashtags, error.error_regular);
+    return console.log(error.error_regular);
   }
   if (hasDuplicates(arr)) {
     defaultValue(text_hashtags);
-    validationError(text_hashtags, error.error_5);
-    return console.log(error.error_5);
+    validationError(text_hashtags, error.error_diplicates);
+    return console.log(error.error_diplicates);
   }
 
 }

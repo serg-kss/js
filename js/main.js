@@ -60,7 +60,7 @@ function getComment(id) {
 function getRandomComments() {
   const commentsList = [];
 
-  for (let index = 0; index < Math.floor(Math.random() * 10); index++) {
+  for (let index = 0; index < Math.floor(Math.random() * 101); index++) {
     let id = getId();
 
     //проверяем есть ли сгенерированный id в массиве, если есть генерируем заново

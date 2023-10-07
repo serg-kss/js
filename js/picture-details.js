@@ -12,6 +12,9 @@ const picture_cancel = document.querySelector("#picture-cancel");
 const template_comment = document.querySelector("#social__comment");
 const social_comments = document.querySelector(".social__comments");
 const def_comment = document.querySelector(".social__comment");
+const social_comments_loader = document.querySelector(".social__comments-loader");
+let picture_id = 0;
+let comment_index = 5;
 
 // создаем клон одного комментария
 function getComment(data) {
@@ -24,18 +27,32 @@ function getComment(data) {
   social_author.textContent = data.name;
   social_text.textContent = data.message;
   social_picture.src = data.avatar;
-
   return comment;
 }
 
 // получаем список комментариев из пришедшего массива
+
+function increaseCommentsIndex() {
+  social_comments.replaceChildren('');
+  comment_index += 5;
+  getPictureInfo(picture_id);
+}
+
+social_comments_loader.addEventListener('click', increaseCommentsIndex);
+
 function getComments(dataArr) {
   let comments = new DocumentFragment();
-  for (let index = 0; index < dataArr.length; index++) {
-    comments.append(getComment(dataArr[index]));
+  if (dataArr.length - comment_index < 0) {
+    comment_index = dataArr.length;
+    social_comments_loader.classList.add("hidden");
+  }
+  for (let index = 0; index < comment_index; index++) {
+    comments.append((getComment(dataArr[index])));
   }
   return comments;
 }
+
+
 
 //получаем нужный обьект из массива данных и перезаписываем переменные согласно полученному id
 function getPictureInfo(id) {
@@ -70,7 +87,8 @@ function handler(event) {
       big_picture.classList.remove("hidden");
       body.classList.add("modal-open");
       def_comment.remove();
-      getPictureInfo(event.target.dataset.id);
+      picture_id = event.target.dataset.id;
+      getPictureInfo(picture_id);
     }
   }
 }
@@ -82,10 +100,16 @@ function closePictureWindow() {
 
 function closeWindow() {
   closePictureWindow();
+  social_comments.replaceChildren('');
+  comment_index = 5;
+  social_comments_loader.classList.remove("hidden");
 }
 function closeWindowESC(KeyboardEvent) {
   if (KeyboardEvent.code.match("Escape")) {
     closePictureWindow();
+    social_comments.replaceChildren('');
+    comment_index = 5;
+    social_comments_loader.classList.remove("hidden");
   }
 }
 //открываем картинку
