@@ -98,18 +98,19 @@ function closePictureWindow() {
   body.classList.remove("modal-open");
 }
 
-function closeWindow() {
+function backToDefault() {
   closePictureWindow();
   social_comments.replaceChildren('');
   comment_index = 5;
   social_comments_loader.classList.remove("hidden");
 }
+
+function closeWindow() {
+  backToDefault();
+}
 function closeWindowESC(KeyboardEvent) {
   if (KeyboardEvent.code.match("Escape")) {
-    closePictureWindow();
-    social_comments.replaceChildren('');
-    comment_index = 5;
-    social_comments_loader.classList.remove("hidden");
+    backToDefault();
   }
 }
 //открываем картинку
