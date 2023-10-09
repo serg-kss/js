@@ -103,10 +103,10 @@ function backToDefault() {
   social_comments_loader.classList.remove("hidden");
 }
 
-
 function closeWindow() {
   backToDefault();
 }
+
 function closeWindowESC(KeyboardEvent) {
   if (KeyboardEvent.code.match("Escape")) {
     backToDefault();

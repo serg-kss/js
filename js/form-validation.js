@@ -1,3 +1,85 @@
+//Зміна розміру зображення code start
+const img_upload_preview = document.querySelector(".img-upload__preview");
+
+const scale_control_smaller = document.querySelector(".scale__control--smaller");
+const scale_control_bigger = document.querySelector(".scale__control--bigger");
+const scale_control = document.querySelector(".scale__control--value");
+let scale_control_value_index = 25;
+let scale_control_value = parseInt(scale_control.value);
+
+function increaseScaleControlValue() {
+  if (scale_control_value < 100) {
+    scale_control_value += scale_control_value_index;
+    scale_control.value = String(scale_control_value)+"%";
+    img_upload_preview.style.cssText += `scale: 0.${scale_control_value};`;
+  }
+  if (scale_control_value === 100) {
+    img_upload_preview.style.cssText += `scale: 1;`;
+  }
+}
+
+function decreaseScaleControlValue() {
+  if (scale_control_value > 25) {
+    scale_control_value -= scale_control_value_index;
+    scale_control.value = String(scale_control_value)+"%";
+    img_upload_preview.style.cssText += `scale: 0.${scale_control_value};`;
+  }
+}
+
+scale_control_bigger.addEventListener('click', increaseScaleControlValue);
+scale_control_smaller.addEventListener('click', decreaseScaleControlValue);
+
+
+const effects_list = document.querySelector(".effects__list");
+const effects = {
+  none: "effects__preview--none",
+  chrome: "effects__preview--chrome",
+  sepia: "effects__preview--sepia",
+  marvin: "effects__preview--marvin",
+  phobos: "effects__preview--phobos",
+  heat: "effects__preview--heat"
+}
+
+function switchEffect(effect) {
+  img_upload_preview.classList.remove(
+    effects.none,
+    effects.chrome,
+    effects.sepia,
+    effects.marvin,
+    effects.phobos,
+    effects.heat,
+  );
+  img_upload_preview.classList.add(effect);
+}
+
+function chooseEffect(event) {
+  
+  switch (event.target.id) {
+    case "effect-none":
+      switchEffect(effects.none);
+      break;
+    case "effect-chrome":
+      switchEffect(effects.chrome);
+      break;
+    case "effect-sepia":
+      switchEffect(effects.sepia);
+      break;
+    case "effect-marvin":
+      switchEffect(effects.marvin);
+      break;
+    case "effect-phobos":
+      switchEffect(effects.phobos);
+      break;
+    case "effect-heat":
+      switchEffect(effects.heat);
+      break;
+  }
+}
+
+effects_list.addEventListener("click", chooseEffect);
+
+//Зміна розміру зображення  code end
+
 const uploadPictureForm = document.getElementById("upload-select-image");
 const configPictureForm = document.querySelector(".img-upload__overlay");
 const fileInput = document.getElementById("upload-file");
