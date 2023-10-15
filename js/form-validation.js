@@ -36,55 +36,31 @@ scale_control_smaller.addEventListener("click", decreaseScaleControlValue);
 
 // обьект эффекты
 const effects = {
-  none: "effects__preview--none",
-  chrome: "effects__preview--chrome",
-  sepia: "effects__preview--sepia",
-  marvin: "effects__preview--marvin",
-  phobos: "effects__preview--phobos",
-  heat: "effects__preview--heat",
+  'effect-none': "effects__preview--none",
+  'effect-chrome': "effects__preview--chrome",
+  'effect-sepia': "effects__preview--sepia",
+  'effect-marvin': "effects__preview--marvin",
+  'effect-phobos': "effects__preview--phobos",
+  'effect-heat': "effects__preview--heat",
 };
 
 //функция получает выбранный эффект, убирает предыдущий и добавляет новый
 function switchEffect(effect) {
   img_upload_preview.classList.remove(
-    effects.none,
-    effects.chrome,
-    effects.sepia,
-    effects.marvin,
-    effects.phobos,
-    effects.heat
+    effects["effect-none"],
+    effects["effect-chrome"],
+    effects["effect-sepia"],
+    effects["effect-marvin"],
+    effects["effect-phobos"],
+    effects["effect-heat"]
   );
   img_upload_preview.classList.add(effect);
 }
 
-// функция определяет какой эффект выбран, вызывает функция что применяет данный эффект и передает эффект далее на слайдер
+// функция определяет какой эффект выбран, вызывает функция что применяет данный эффект и передает эффект далее 
 function chooseEffect(event) {
-  switch (event.target.id) {
-    case "effect-none":
-      switchEffect(effects.none);
-      slideEffect(effects.none);
-      break;
-    case "effect-chrome":
-      switchEffect(effects.chrome);
-      slideEffect(effects.chrome);
-      break;
-    case "effect-sepia":
-      switchEffect(effects.sepia);
-      slideEffect(effects.sepia);
-      break;
-    case "effect-marvin":
-      switchEffect(effects.marvin);
-      slideEffect(effects.marvin);
-      break;
-    case "effect-phobos":
-      switchEffect(effects.phobos);
-      slideEffect(effects.phobos);
-      break;
-    case "effect-heat":
-      switchEffect(effects.heat);
-      slideEffect(effects.heat);
-      break;
-  }
+  switchEffect(effects[event.target.id]);
+  slideEffect(effects[event.target.id]);
 }
 
 effects_list.addEventListener("click", chooseEffect);
@@ -136,48 +112,45 @@ function createSlider(step, min, max, effectName) {
 
 // функция для определения какой эффект выбран, настроек слайдера и вызов функции создание слайдера
 function slideEffect(effect) {
-  if (effect === effects.chrome) {
-    step = 0.1;
-    min = 0;
-    max = 1;
-    effectName = "grayscale";
-    createSlider(step, min, max, effectName);
-  }
-  if (effect === effects.sepia) {
-    step = 0.1;
-    min = 0;
-    max = 1;
-    effectName = "sepia";
-    createSlider(step, min, max, effectName);
-  }
-  if (effect === effects.marvin) {
-    step = 1;
-    min = 0;
-    max = 100;
-    effectName = "invert";
-    createSlider(step, min, max, effectName);
-  }
-  if (effect === effects.phobos) {
-    step = 0.1;
-    min = 0;
-    max = 3;
-    effectName = "blur";
-    createSlider(step, min, max, effectName);
-  }
-  if (effect === effects.heat) {
-    step = 0.1;
-    min = 1;
-    max = 3;
-    effectName = "brightness";
-    createSlider(step, min, max, effectName);
-  }
-  if (effect === effects.none) {
+  if (effect === effects["effect-none"]) {
     step = 0;
     min = 0;
     max = 0;
     effectName = "";
     destroyExistingSlider();
     img_upload_preview.style.removeProperty("filter");
+  } else {
+    if (effect === effects["effect-chrome"]) {
+      step = 0.1;
+      min = 0;
+      max = 1;
+      effectName = "grayscale";
+    }
+    if (effect === effects["effect-sepia"]) {
+      step = 0.1;
+      min = 0;
+      max = 1;
+      effectName = "sepia";
+    }
+    if (effect === effects["effect-marvin"]) {
+      step = 1;
+      min = 0;
+      max = 100;
+      effectName = "invert";
+    }
+    if (effect === effects["effect-phobos"]) {
+      step = 0.1;
+      min = 0;
+      max = 3;
+      effectName = "blur";
+    }
+    if (effect === effects["effect-heat"]) {
+      step = 0.1;
+      min = 1;
+      max = 3;
+      effectName = "brightness";
+    }
+    createSlider(step, min, max, effectName);
   }
 }
 
