@@ -1,16 +1,18 @@
 //Зміна розміру зображення code start
 const img_upload_preview = document.querySelector(".img-upload__preview");
-
+const effect_level_value = document.querySelector(".effect-level__value");
 const scale_control_smaller = document.querySelector(".scale__control--smaller");
 const scale_control_bigger = document.querySelector(".scale__control--bigger");
 const scale_control = document.querySelector(".scale__control--value");
 let scale_control_value_index = 25;
 let scale_control_value = parseInt(scale_control.value);
+const effects_list = document.querySelector(".effects__list");
 
+//увеличение масштаба
 function increaseScaleControlValue() {
   if (scale_control_value < 100) {
     scale_control_value += scale_control_value_index;
-    scale_control.value = String(scale_control_value)+"%";
+    scale_control.value = String(scale_control_value) + "%";
     img_upload_preview.style.cssText += `scale: 0.${scale_control_value};`;
   }
   if (scale_control_value === 100) {
@@ -18,28 +20,31 @@ function increaseScaleControlValue() {
   }
 }
 
+//уменьшение масштаба
 function decreaseScaleControlValue() {
   if (scale_control_value > 25) {
     scale_control_value -= scale_control_value_index;
-    scale_control.value = String(scale_control_value)+"%";
+    scale_control.value = String(scale_control_value) + "%";
     img_upload_preview.style.cssText += `scale: 0.${scale_control_value};`;
   }
 }
 
-scale_control_bigger.addEventListener('click', increaseScaleControlValue);
-scale_control_smaller.addEventListener('click', decreaseScaleControlValue);
+//обработчики событий для масштаба
+scale_control_bigger.addEventListener("click", increaseScaleControlValue);
+scale_control_smaller.addEventListener("click", decreaseScaleControlValue);
 
 
-const effects_list = document.querySelector(".effects__list");
+// обьект эффекты
 const effects = {
   none: "effects__preview--none",
   chrome: "effects__preview--chrome",
   sepia: "effects__preview--sepia",
   marvin: "effects__preview--marvin",
   phobos: "effects__preview--phobos",
-  heat: "effects__preview--heat"
-}
+  heat: "effects__preview--heat",
+};
 
+//функция получает выбранный эффект, убирает предыдущий и добавляет новый
 function switchEffect(effect) {
   img_upload_preview.classList.remove(
     effects.none,
@@ -47,31 +52,37 @@ function switchEffect(effect) {
     effects.sepia,
     effects.marvin,
     effects.phobos,
-    effects.heat,
+    effects.heat
   );
   img_upload_preview.classList.add(effect);
 }
 
+// функция определяет какой эффект выбран, вызывает функция что применяет данный эффект и передает эффект далее на слайдер
 function chooseEffect(event) {
-  
   switch (event.target.id) {
     case "effect-none":
       switchEffect(effects.none);
+      slideEffect(effects.none);
       break;
     case "effect-chrome":
       switchEffect(effects.chrome);
+      slideEffect(effects.chrome);
       break;
     case "effect-sepia":
       switchEffect(effects.sepia);
+      slideEffect(effects.sepia);
       break;
     case "effect-marvin":
       switchEffect(effects.marvin);
+      slideEffect(effects.marvin);
       break;
     case "effect-phobos":
       switchEffect(effects.phobos);
+      slideEffect(effects.phobos);
       break;
     case "effect-heat":
       switchEffect(effects.heat);
+      slideEffect(effects.heat);
       break;
   }
 }
@@ -79,6 +90,98 @@ function chooseEffect(event) {
 effects_list.addEventListener("click", chooseEffect);
 
 //Зміна розміру зображення  code end
+
+//слайдер - редактирование загруженной картинки
+const slider = document.getElementById("slider");
+
+//переменные для слайдера
+let step = 0;
+let min = 0;
+let max = 0;
+let effectName = "";
+
+//удаление слайдера если он уже был создан
+function destroyExistingSlider() {
+  if (slider && slider.noUiSlider) {
+    slider.noUiSlider.destroy();
+  }
+}
+
+// создание слайдера
+function createSlider(step, min, max, effectName) {
+  destroyExistingSlider();
+  noUiSlider.create(slider, {
+    start: [0],
+    step: step,
+    tooltips: true,
+    connect: true,
+    range: {
+      min: min,
+      max: max,
+    },
+  });
+  slider.noUiSlider.on("update", function (values) {
+    if (effectName === "invert") {
+      img_upload_preview.style.cssText += `filter: ${effectName}(${values[0]}%);`;
+      effect_level_value.value = values;
+    } else if (effectName === "blur") {
+      img_upload_preview.style.cssText += `filter: ${effectName}(${values[0]}px);`;
+      effect_level_value.value = values;
+    } else {
+      img_upload_preview.style.cssText += `filter: ${effectName}(${values[0]});`;
+      effect_level_value.value = values;
+    }
+  });
+}
+
+// функция для определения какой эффект выбран, настроек слайдера и вызов функции создание слайдера
+function slideEffect(effect) {
+  if (effect === effects.chrome) {
+    step = 0.1;
+    min = 0;
+    max = 1;
+    effectName = "grayscale";
+    createSlider(step, min, max, effectName);
+  }
+  if (effect === effects.sepia) {
+    step = 0.1;
+    min = 0;
+    max = 1;
+    effectName = "sepia";
+    createSlider(step, min, max, effectName);
+  }
+  if (effect === effects.marvin) {
+    step = 1;
+    min = 0;
+    max = 100;
+    effectName = "invert";
+    createSlider(step, min, max, effectName);
+  }
+  if (effect === effects.phobos) {
+    step = 0.1;
+    min = 0;
+    max = 3;
+    effectName = "blur";
+    createSlider(step, min, max, effectName);
+  }
+  if (effect === effects.heat) {
+    step = 0.1;
+    min = 1;
+    max = 3;
+    effectName = "brightness";
+    createSlider(step, min, max, effectName);
+  }
+  if (effect === effects.none) {
+    step = 0;
+    min = 0;
+    max = 0;
+    effectName = "";
+    destroyExistingSlider();
+    img_upload_preview.style.removeProperty("filter");
+  }
+}
+
+//слайдер - редактирование загруженной картинки -- конец
 
 const uploadPictureForm = document.getElementById("upload-select-image");
 const configPictureForm = document.querySelector(".img-upload__overlay");
@@ -179,7 +282,6 @@ function hashtagsValidation(event) {
     validationError(text_hashtags, error.error_diplicates);
     return console.log(error.error_diplicates);
   }
-
 }
 text_hashtags.addEventListener("change", hashtagsValidation);
 
@@ -188,7 +290,7 @@ text_hashtags.addEventListener("change", hashtagsValidation);
 function commentValidation(event) {
   const maxlenght = 140;
   const comment = event.target.value;
-  const error = "no more than 140 symbl"
+  const error = "no more than 140 symbl";
 
   if (comment.length > maxlenght) {
     defaultValue(text_description);
