@@ -1,3 +1,4 @@
+/*
 const likeCount = {
   min: 15,
   max: 200,
@@ -90,7 +91,21 @@ function getPhotos() {
   }
   return photos;
 }
-
+*/
 //експорт
+//axios
+//const axios = require('axios');
+//import axios from 'axios';
+const pictures_addres = "http://localhost:5000/api/pictures";
+async function getPhotos() {
+  try {
+    const response = await axios.get(pictures_addres);
+    console.log(response);
+    return response;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 export const photos = getPhotos();
 console.log(photos);
