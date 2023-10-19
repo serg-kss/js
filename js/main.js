@@ -96,16 +96,33 @@ function getPhotos() {
 //axios
 //const axios = require('axios');
 //import axios from 'axios';
-const pictures_addres = "http://localhost:5000/api/pictures";
-async function getPhotos() {
+
+/*function getPhotos() {
+  let picture_arr = []
   try {
-    const response = await axios.get(pictures_addres);
-    console.log(response);
-    return response;
+    axios.get(pictures_addres)
+    .then(response => {
+      console.log(response.data)
+      picture_arr = parseJSON(response.data);
+    })
+    fetch(pictures_addres)
+    .then((response) => {
+        response.json()
+            .then((array) => map.addMarkers(moreJons));
+    });
   } catch (error) {
     console.error(error);
   }
+  return picture_arr;
+}*/
+const pictures_addres = "http://localhost:5000/api/pictures";
+let photos = []
+async function getPhotos() {
+  const response = await fetch(pictures_addres);
+  photos = await response.json();
+  console.log(photos); //   тут норм массив
 }
-
-export const photos = getPhotos();
-console.log(photos);
+getPhotos();
+//export const photos = photos_arr;
+export default photos;
+console.log(photos)// тут пустой почему то
