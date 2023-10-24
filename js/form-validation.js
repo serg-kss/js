@@ -1,12 +1,21 @@
 //Зміна розміру зображення code start
 const img_upload_preview = document.querySelector(".img-upload__preview");
 const effect_level_value = document.querySelector(".effect-level__value");
-const scale_control_smaller = document.querySelector(".scale__control--smaller");
+const scale_control_smaller = document.querySelector(
+  ".scale__control--smaller"
+);
 const scale_control_bigger = document.querySelector(".scale__control--bigger");
 const scale_control = document.querySelector(".scale__control--value");
 let scale_control_value_index = 25;
 let scale_control_value = parseInt(scale_control.value);
 const effects_list = document.querySelector(".effects__list");
+
+let picture_object = {
+  picture: '',
+  hashtag: '',
+  description: '',
+  effect: ''
+}
 
 //увеличение масштаба
 function increaseScaleControlValue() {
@@ -33,15 +42,14 @@ function decreaseScaleControlValue() {
 scale_control_bigger.addEventListener("click", increaseScaleControlValue);
 scale_control_smaller.addEventListener("click", decreaseScaleControlValue);
 
-
 // обьект эффекты
 const effects = {
-  'effect-none': "effects__preview--none",
-  'effect-chrome': "effects__preview--chrome",
-  'effect-sepia': "effects__preview--sepia",
-  'effect-marvin': "effects__preview--marvin",
-  'effect-phobos': "effects__preview--phobos",
-  'effect-heat': "effects__preview--heat",
+  "effect-none": "effects__preview--none",
+  "effect-chrome": "effects__preview--chrome",
+  "effect-sepia": "effects__preview--sepia",
+  "effect-marvin": "effects__preview--marvin",
+  "effect-phobos": "effects__preview--phobos",
+  "effect-heat": "effects__preview--heat",
 };
 
 //функция получает выбранный эффект, убирает предыдущий и добавляет новый
@@ -57,7 +65,7 @@ function switchEffect(effect) {
   img_upload_preview.classList.add(effect);
 }
 
-// функция определяет какой эффект выбран, вызывает функция что применяет данный эффект и передает эффект далее 
+// функция определяет какой эффект выбран, вызывает функция что применяет данный эффект и передает эффект далее
 function chooseEffect(event) {
   switchEffect(effects[event.target.id]);
   slideEffect(effects[event.target.id]);
@@ -162,12 +170,33 @@ const fileInput = document.getElementById("upload-file");
 const text_hashtags = document.querySelector(".text__hashtags");
 const text_description = document.querySelector(".text__description");
 
+//удаляем дефолную картинку и вставляем свою
+function createImg(img) {
+  while (img_upload_preview.firstChild) {
+    //Список является ссылкой, то есть он будет переиндексирован перед каждым вызовом
+    img_upload_preview.removeChild(img_upload_preview.firstChild);
+  }
+  img_upload_preview.appendChild(img);
+}
+
 //загружаем только одну картинку и проверяем!
 function pictureFileValidation(event) {
+  
+  const pictureFile = event.target.files[0];
   const pictureType = event.target.files[0].type;
   if (pictureType == "image/jpeg" || pictureType == "image/png") {
     configPictureForm.classList.remove("hidden");
   } else alert("It is not a Picture, please try again!");
+
+  const img = document.createElement("img");
+  createImg(img);
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(pictureFile);
+  picture_object.picture = pictureFile;
 }
 fileInput.addEventListener("change", pictureFileValidation);
 
@@ -255,6 +284,8 @@ function hashtagsValidation(event) {
     validationError(text_hashtags, error.error_diplicates);
     return console.log(error.error_diplicates);
   }
+
+  picture_object.hashtag = inputValue;
 }
 text_hashtags.addEventListener("change", hashtagsValidation);
 
@@ -269,11 +300,26 @@ function commentValidation(event) {
     defaultValue(text_description);
     validationError(text_description, error);
   }
+
+  picture_object.description = comment
 }
 text_description.addEventListener("change", commentValidation);
 
 function handleFormSubmit() {
+  console.log(picture_object)
   //fields for sending to server
+  const url = 'http://localhost:5000/api/add-picture';
+  fetch(url, {  
+    method: 'post',   
+    body: JSON.stringify(picture_object)  
+  })
+  .then(json)  
+  .then(function (data) {  
+    console.log('Request succeeded with JSON response', data);  
+  })  
+  .catch(function (error) {  
+    console.log('Request failed', error);  
+  });
 }
 
 uploadPictureForm.addEventListener("submit", handleFormSubmit);
